@@ -1,11 +1,18 @@
-variable "vpc_id" {}
+
+
+resource "aws_vpc" "main" {
+  cidr_block = var.vpc_cidr 
+  tags = {
+    Name = var.vpc_name
+  }
+}
 
 data "aws_availability_zones" "available" {}
 
 resource "aws_subnet" "public_subnet" {
   count                   = length(data.aws_availability_zones.available.names)
-  vpc_id                  = var.vpc_id
-  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index * 2)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(aws_vpc.main.id, 8, count.index * 2)
   availability_zone       = element(data.aws_availability_zones.available.names, count.index)
   map_public_ip_on_launch = true
   tags = {
@@ -15,8 +22,8 @@ resource "aws_subnet" "public_subnet" {
 
 resource "aws_subnet" "private_subnet" {
   count                   = length(data.aws_availability_zones.available.names)
-  vpc_id                  = var.vpc_id
-  cidr_block              = cidrsubnet(var.vpc_cidr, 8, count.index * 2 + 1)
+  vpc_id                  = aws_vpc.main.id
+  cidr_block              = cidrsubnet(aws_vpc.main.id, 8, count.index * 2 + 1)
   availability_zone       = element(data.aws_availability_zones.available.names, count.index)
   map_public_ip_on_launch = false
   tags = {
@@ -25,7 +32,7 @@ resource "aws_subnet" "private_subnet" {
 }
 
 resource "aws_route_table" "public_route_table" {
-  vpc_id = var.vpc_id
+  vpc_id = aws_vpc.main.id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -38,7 +45,7 @@ resource "aws_route_table" "public_route_table" {
 }
 
 resource "aws_route_table" "private_route_table" {
-  vpc_id = var.vpc_id
+  vpc_id = aws_vpc.main.id
 
   tags = {
     Name = "private-route-table"
@@ -46,7 +53,7 @@ resource "aws_route_table" "private_route_table" {
 }
 
 resource "aws_internet_gateway" "main" {
-  vpc_id = var.vpc_id
+  vpc_id = aws_vpc.main.id
   tags = {
     Name = "IGW for new vpc"
   }
@@ -63,3 +70,6 @@ resource "aws_route_table_association" "private_association" {
   subnet_id      = aws_subnet.private_subnet[count.index].id
   route_table_id = aws_route_table.private_route_table.id
 }
+
+
+

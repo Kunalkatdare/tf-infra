@@ -1,0 +1,10 @@
+vpc_cidr                  = "10.0.0.0/16"
+vpc_name                  = "tf-vpc"
+aws_region                = "us-east-1"
+ecs_cluster_name          = "dev-cluster"
+cloudwatch_log_group_name = "ecs-dev-cluster-logs"
+capacity_providers        = "FARGATE"
+ecr_repo_name             = ""
+scan_on_push              = true
+image_tag_mutability      = "IMMUTABLE"
+ecr_encryption            = "AES256"
