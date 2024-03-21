@@ -1,0 +1,24 @@
+[
+    {
+    "name": "my-node-app",
+    "image": "682010357027.dkr.ecr.us-east-1.amazonaws.com/node-express:0.1.90",
+    "cpu": 1024,
+    "memory": 2048,
+    "essential": true,
+    "portMappings": [
+        {
+            "containerPort": 3000,
+            "hostPort": 3000,
+            "protocol": "tcp"
+        }
+    ],
+    "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+            "awslogs-group": "ecs-dev-cluster-logs",
+            "awslogs-region": "us-east-1",
+            "awslogs-stream-prefix": "ecs"
+        }
+    }
+}
+]

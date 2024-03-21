@@ -19,14 +19,6 @@ module "vpc" {
   vpc_cidr = var.vpc_cidr
 }
 
-# ECS Cluster module
-module "ecs-cluster" {
-  source                    = "../../modules/ecs-cluster"
-  ecs_cluster_name          = var.ecs_cluster_name
-  capacity_providers        = var.capacity_providers
-  cloudwatch_log_group_name = var.cloudwatch_log_group_name
-}
-
 # Cloudwatch Log Group module
 
 module "cw-log-group" {
@@ -52,4 +44,22 @@ module "security-groups" {
 
 module "iam" {
   source = "../../modules/iam"
+}
+
+# ECS Cluster module
+module "ecs-cluster" {
+  source                    = "../../modules/ecs-cluster"
+  ecs_cluster_name          = var.ecs_cluster_name
+  capacity_providers        = var.capacity_providers
+  cloudwatch_log_group_name = var.cloudwatch_log_group_name
+}
+
+module "ecs-fargate" {
+  source = "../../modules/ecs-fargate"
+  ecs_cluster_name = module.ecs-cluster.cluster_name
+  vpc_id = module.vpc.vpc_id
+  ecs_task_execution_role_arn = module.iam.ecs_task_execution_role_arn
+  ecs_task_role_arn = module.iam.ecs_task_role_arn
+  alb_sg_id = module.security-groups.alb_sg_id
+  rds_sg_id = module.security-groups.rds_sg_id
 }
