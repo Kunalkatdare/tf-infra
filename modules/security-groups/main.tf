@@ -5,10 +5,18 @@ resource "aws_security_group" "alb_sg" {
   
   vpc_id = "vpc-0ad783fd2a58f65d5"
   
+  // Allow HTTPS traffic from anywhere
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   // Allow HTTP traffic from anywhere
   ingress {
-    from_port   = 0
-    to_port     = 65535
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -41,10 +49,10 @@ resource "aws_security_group" "rds_sg" {
   }
 }
 
-output "alb_sg_name" {
-  value = aws_security_group.alb_sg.name
+output "alb_sg_id" {
+  value = aws_security_group.alb_sg.id
 }
 
-output "rds_sg_name" {
-  value = aws_security_group.rds_sg.name
+output "rds_sg_id" {
+  value = aws_security_group.rds_sg.id
 }
