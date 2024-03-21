@@ -22,9 +22,6 @@ variable "capacity_providers" {
   description = "Capacity Providers for the ECS Cluster"
 }
 
-variable "ecr_repo_name" {
-  description = "Name of the ECR Repo"
-}
 variable "image_tag_mutability" {
   description = "Mutability of the Image Tag"
 }
@@ -33,4 +30,40 @@ variable "scan_on_push" {
 }
 variable "ecr_encryption" {
   description = "ECR encryption type"
+}
+variable "ecs_task_def_cpu" {
+  description = "CPU for ECS task definition"
+}
+variable "ecs_task_def_mem" {
+  description = "Memory for ECS task definition"
+}
+variable "alb_target_group" {
+  description = "ALB Target Group"
+}
+variable "alb_listener_port" {
+  description = "ALB listener port"
+}
+variable "alb_name" {
+  description = "Name of the ALB"
+}
+variable "desired_count_tasks" {
+  description = "Desired count of Fargate tasks"
+}
+variable "container_cpu" {
+
+}
+variable "container_mem" {
+  
+}
+variable "ecr_image_tag" {
+  
+}
+variable "container_secrets" {
+  
+}
+variable "project_name" {
+  
+}
+variable "branch_name" {
+  
 }
