@@ -74,5 +74,3 @@ resource "aws_route_table_association" "private_association" {
 output "vpc_id" {
   value = aws_vpc.main.id
 }
-
-
