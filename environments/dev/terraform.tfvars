@@ -17,5 +17,5 @@ container_cpu = 1024
 container_mem = 2048
 project_name = "proxima"
 branch_name = "master"
-ecr_image_tag = "682010357027.dkr.ecr.us-east-1.amazonaws.com/proxima-master:0.1.124"
+ecr_image_tag = "682010357027.dkr.ecr.us-east-1.amazonaws.com/proxima-master"
 container_secrets = "prod/node-express/db"
