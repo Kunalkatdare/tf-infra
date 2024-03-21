@@ -5,18 +5,17 @@ resource "aws_security_group" "alb_sg" {
   
   vpc_id = "vpc-0ad783fd2a58f65d5"
   
-  // Allow HTTPS traffic from anywhere
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
   // Allow HTTP traffic from anywhere
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  // Allow HTTPS traffic from anywhere
+  ingress {
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
