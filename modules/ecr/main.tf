@@ -8,3 +8,7 @@ resource "aws_ecr_repository" "ecr_repo" {
     encryption_type = var.ecr_encryption
   }
 }
+
+output "ecr_repo_name" {
+  value = aws_ecr_repository.ecr_repo.name
+}

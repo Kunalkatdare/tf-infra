@@ -28,3 +28,7 @@ resource "aws_ecs_cluster_capacity_providers" "ecs_cluster_capacity_provider" {
     capacity_provider = var.capacity_providers
   }
 }
+
+output "cluster" {
+  value = aws_ecs_cluster.cluster.name
+}
