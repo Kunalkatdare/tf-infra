@@ -6,6 +6,10 @@ data "aws_subnets" "private_subnets" {
   }
 }
 
+data "aws_security_group" "ecs_sg" {
+  name = "ecs-security-group-${var.tier}"
+}
+
 resource "aws_db_subnet_group" "rds_subnet_group" {
   name       = "rds_subnet_group"
   subnet_ids = data.aws_subnets.private_subnets.ids
@@ -22,13 +26,13 @@ resource "aws_security_group" "rds_security_group" {
     from_port       = var.rds_ingress_port
     to_port         = var.rds_ingress_port
     protocol        = "tcp"
-    security_groups = [var.ecs_sg_id]
+    security_groups = [data.aws_security_group.ecs_sg.id]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1" 
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 }

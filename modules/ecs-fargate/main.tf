@@ -5,6 +5,30 @@ data "aws_subnets" "public" {
   }
 }
 
+data "aws_security_group" "alb_sg" {
+  name = "alb-security-group-${var.tier}"
+}
+
+data "aws_security_group" "ecs_sg" {
+  name = "ecs-security-group-${var.tier}"
+}
+
+data "aws_iam_role" "ecs_task_execution_role" {
+  name = "ECSTaskExecutionRole-${var.tier}"
+}
+data "aws_iam_role" "ecs_task_role" {
+  name = "ECSTaskRole-${var.tier}"
+}
+
+data "aws_secretsmanager_secret" "by-name" {
+  name = var.container_secrets
+}
+
+data "aws_acm_certificate" "acm_cert" {
+  domain   = "www.wanderwyse.com"
+  statuses = ["ISSUED"]
+}
+
 resource "aws_ecs_service" "ecs_node_app" {
   name            = "${var.project_name}-${var.branch_name}-${var.tier}-service"
   cluster         = var.ecs_cluster_name
@@ -14,7 +38,7 @@ resource "aws_ecs_service" "ecs_node_app" {
 
   network_configuration {
     subnets          = data.aws_subnets.public.ids
-    security_groups  = [var.ecs_sg_id]
+    security_groups  = [data.aws_security_group.ecs_sg.id]
     assign_public_ip = true
   }
 
@@ -25,9 +49,7 @@ resource "aws_ecs_service" "ecs_node_app" {
   }
 }
 
-data "aws_secretsmanager_secret" "by-name" {
-  name = var.container_secrets
-}
+
 
 resource "aws_ecs_task_definition" "ecs_task_def" {
   family                   = "${var.project_name}-${var.branch_name}-${var.tier}-service"
@@ -42,8 +64,8 @@ resource "aws_ecs_task_definition" "ecs_task_def" {
       essential = true,
       portMappings = [
         {
-          containerPort = 3000,
-          hostPort      = 3000,
+          containerPort = var.container_port,
+          hostPort      = var.host_port,
           protocol      = "tcp"
         }
       ],
@@ -81,24 +103,20 @@ resource "aws_ecs_task_definition" "ecs_task_def" {
   ])
   cpu                = var.ecs_task_def_cpu
   memory             = var.ecs_task_def_mem
-  execution_role_arn = var.ecs_task_execution_role_arn # Provide the ARN of your ECS execution role
-  task_role_arn      = var.ecs_task_role_arn
+  execution_role_arn = data.aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn      = data.aws_iam_role.ecs_task_role.arn
 }
 
 resource "aws_alb" "alb" {
   name                       = "${var.project_name}-${var.branch_name}-${var.tier}"
   load_balancer_type         = "application"
   internal                   = false
-  security_groups            = [var.alb_sg_id]
+  security_groups            = [data.aws_security_group.alb_sg.id]
   subnets                    = data.aws_subnets.public.ids
   enable_deletion_protection = false
 
 }
 
-data "aws_acm_certificate" "acm_cert" {
-  domain   = "www.wanderwyse.com"
-  statuses = ["ISSUED"]
-}
 
 resource "aws_alb_listener" "alb_listener_http" {
   load_balancer_arn = aws_alb.alb.arn
@@ -151,7 +169,7 @@ resource "aws_alb_target_group" "alb_target_group" {
   vpc_id      = var.vpc_id
   target_type = "ip"
   health_check {
-    path                = "/"
+    path                = var.app_health_check_path
     protocol            = "HTTP"
     matcher             = "200-399"
     interval            = 30

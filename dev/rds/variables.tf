@@ -1,15 +1,12 @@
-variable "vpc_id" {
-  description = "The ID of the VPC."
-}
-
 variable "db_secret_path" {
   description = "The path to the secret containing database credentials."
 }
-
 variable "rds_ingress_port" {
   description = "RDS Ingress port"
 }
-
+variable "tier" {
+  description = "Tier"
+}
 variable "rds_storage" {
   description = "RDS Storage"
 }
@@ -30,7 +27,4 @@ variable "engine" {
 }
 variable "engine_version" {
   description = "RDS Engine Version"
-}
-variable "tier" {
-  description = "Tier"
 }

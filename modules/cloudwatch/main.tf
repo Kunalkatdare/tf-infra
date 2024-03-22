@@ -12,13 +12,13 @@ resource "aws_kms_key" "kms_key" {
       "Id" : "key-policy-for-cloudwatch-logs",
       "Statement" : [
         {
-            "Sid": "Enable IAM User Permissions",
-            "Effect": "Allow",
-            "Principal": {
-                "AWS": "arn:aws:iam::${var.aws_account_id}:root"
-            },
-            "Action": "kms:*",
-            "Resource": "*"
+          "Sid" : "Enable IAM User Permissions",
+          "Effect" : "Allow",
+          "Principal" : {
+            "AWS" : "arn:aws:iam::${var.aws_account_id}:root"
+          },
+          "Action" : "kms:*",
+          "Resource" : "*"
         },
         {
           "Sid" : "Allow CloudWatch Logs to use the key",

@@ -1,15 +1,3 @@
-variable "vpc_cidr" {
-  description = "CIDR block for the VPC"
-}
-
-variable "vpc_name" {
-  description = "Name for the VPC"
-}
-
-variable "aws_region" {
-  description = "AWS Region"
-}
-
 variable "ecs_cluster_name" {
   description = "Name of the ECS Cluster"
 }
@@ -60,30 +48,13 @@ variable "project_name" {
 variable "branch_name" {
   description = "Name of the Git branch"
 }
-
-variable "rds_ingress_port" {
-  description = "RDS Ingress port"
+variable "container_port" {
+  description = "Port exposed by the container"
+}
+variable "host_port" {
+  description = "Port exposed by the host"
+}
+variable "app_health_check_path" {
+  description = "application health check path"
 }
 
-variable "rds_storage" {
-  description = "RDS Storage"
-}
-variable "db_name" {
-  description = "RDS DB Name"
-}
-
-variable "rds_instance_class" {
-  description = "RDS Instance Class"
-}
-variable "db_identifier" {
-  description = "RDS DB Identifier"
-}
-variable "storage_type" {
-  description = "RDS Storage Type"
-}
-variable "engine" {
-  description = "RDS Engine"
-}
-variable "engine_version" {
-  description = "RDS Engine Version"
-}

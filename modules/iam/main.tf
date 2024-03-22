@@ -1,5 +1,5 @@
 resource "aws_iam_role" "ecs_task_execution_role" {
-  name = "ECSTaskExecutionRole"
+  name = "ECSTaskExecutionRole-${var.tier}"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -15,7 +15,7 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 }
 
 resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
-  name = "ECSTaskExecutionRolePolicy"
+  name = "ECSTaskExecutionRolePolicy-${var.tier}"
   role = aws_iam_role.ecs_task_execution_role.name
   policy = jsonencode({
     "Version" : "2012-10-17",
@@ -27,7 +27,7 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
           "ecr:BatchGetImage"
-          
+
         ],
         "Resource" : "*"
       },
@@ -57,7 +57,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_role_attachment" {
 }
 
 resource "aws_iam_role" "ecs_task_role" {
-  name = "ECSTaskRole"
+  name = "ECSTaskRole-${var.tier}"
   assume_role_policy = jsonencode({
     "Version" : "2012-10-17",
     "Statement" : [
@@ -73,7 +73,7 @@ resource "aws_iam_role" "ecs_task_role" {
 }
 
 resource "aws_iam_role_policy" "ecs_task_role_policy" {
-  name = "ECSTaskRolePolicy"
+  name = "ECSTaskRolePolicy-${var.tier}"
   role = aws_iam_role.ecs_task_role.name
   policy = jsonencode({
     "Version" : "2012-10-17",
