@@ -22,16 +22,15 @@ variable "db_name" {
 variable "rds_instance_class" {
   description = "RDS Instance Class"
 }
-
 variable "db_identifier" {
-  description = "RDS DB Name"
+  description = "RDS Identifier"
 }
 variable "storage_type" {
-  description = "RDS Instance Class"
+  description = "RDS Storage Type"
 }
 variable "engine" {
-  description = "RDS DB Name"
+  description = "RDS Engine"
 }
 variable "engine_version" {
-  description = "RDS Instance Class"
+  description = "RDS Engine Version"
 }

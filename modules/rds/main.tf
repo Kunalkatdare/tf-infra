@@ -18,7 +18,6 @@ resource "aws_security_group" "rds_security_group" {
   name        = "rds-security-group"
   description = "Security group for RDS instance allowing inbound and outbound traffic"
   vpc_id      = var.vpc_id
-  // Ingress rule allowing traffic from anywhere on port 5432 (Postgres)
   ingress {
     from_port       = var.rds_ingress_port
     to_port         = var.rds_ingress_port
@@ -26,15 +25,11 @@ resource "aws_security_group" "rds_security_group" {
     security_groups = [var.ecs_sg_id]
   }
 
-  // Egress rule allowing all outbound traffic
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1" // All protocols
+    protocol    = "-1" 
     cidr_blocks = ["0.0.0.0/0"]
-  }
-  tags = {
-    Name = "RDS Security Group"
   }
 }
 
@@ -62,11 +57,6 @@ resource "aws_db_instance" "rds" {
   storage_encrypted      = true
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_security_group.id]
-
-
-  tags = {
-    Name = "TF RDS database"
-  }
 }
 
 output "rds_endpoint" {

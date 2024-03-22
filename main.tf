@@ -57,7 +57,6 @@ module "iam" {
   source = "./modules/iam"
 }
 
-# ECS Cluster module
 module "ecs-cluster" {
   source                    = "./modules/ecs-cluster"
   ecs_cluster_name          = var.ecs_cluster_name

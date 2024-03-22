@@ -2,17 +2,14 @@
 resource "aws_security_group" "alb_sg" {
   name        = "ALB security group"
   description = "Security group for Application Load Balancer"
+  vpc_id = var.vpc_id
 
-  vpc_id = "vpc-0ad783fd2a58f65d5"
-
-  // Allow HTTP traffic from anywhere
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
-  // Allow HTTPS traffic from anywhere
   ingress {
     from_port   = 0
     to_port     = 65535
@@ -20,17 +17,15 @@ resource "aws_security_group" "alb_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # Egress rules for ALB
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"          # Allow all protocols
-    cidr_blocks = ["0.0.0.0/0"] # Allow traffic to anywhere
+    protocol    = "-1" 
+    cidr_blocks = ["0.0.0.0/0"] 
   }
 
 }
-
 
 resource "aws_security_group" "ecs_sg" {
   name        = "ECS security group"
@@ -38,21 +33,19 @@ resource "aws_security_group" "ecs_sg" {
 
   vpc_id = var.vpc_id
 
-  // Allow HTTP traffic from anywhere
   ingress {
     from_port       = 0
     to_port         = 65535
     protocol        = "tcp"
-    security_groups = [aws_security_group.alb_sg.id] # Allow traffic from ALB SG
+    security_groups = [aws_security_group.alb_sg.id]
   }
 
-  # Egress rules for ALB
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0
     to_port     = 0
-    protocol    = "-1"          # Allow all protocols
-    cidr_blocks = ["0.0.0.0/0"] # Allow traffic to anywhere
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
 }

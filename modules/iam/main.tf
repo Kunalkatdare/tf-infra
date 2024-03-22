@@ -14,7 +14,6 @@ resource "aws_iam_role" "ecs_task_execution_role" {
   })
 }
 
-# Attach the necessary IAM policy to ECS Task Execution Role
 resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
   name = "ECSTaskExecutionRolePolicy"
   role = aws_iam_role.ecs_task_execution_role.name
@@ -52,7 +51,6 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
   })
 }
 
-# Attach the necessary IAM policy to ECS Task Execution Role
 resource "aws_iam_role_policy_attachment" "ecs_task_role_attachment" {
   role       = aws_iam_role.ecs_task_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
@@ -74,7 +72,6 @@ resource "aws_iam_role" "ecs_task_role" {
   })
 }
 
-# Attach the necessary IAM policy to ECS Task Role
 resource "aws_iam_role_policy" "ecs_task_role_policy" {
   name = "ECSTaskRolePolicy"
   role = aws_iam_role.ecs_task_role.name
