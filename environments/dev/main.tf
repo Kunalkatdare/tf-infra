@@ -11,6 +11,11 @@ provider "aws" {
   region = var.aws_region
 }
 
+
+module "init"{
+  source = "../../modules/init"
+}
+
 # VPC & Subnet module
 module "vpc" {
   source = "../../modules/vpc"
@@ -22,7 +27,8 @@ module "vpc" {
 module "cw-log-group" {
   source                    = "../../modules/cloudwatch"
   cloudwatch_log_group_name = var.cloudwatch_log_group_name
-
+  aws_account_id = module.init.aws_account_id
+  aws_region = module.init.aws_region
 }
 
 # ECR module

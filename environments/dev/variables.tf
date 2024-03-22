@@ -7,7 +7,7 @@ variable "vpc_name" {
 }
 
 variable "aws_region" {
-  description = "Name of the AWS Region"
+  description = "AWS Region"
 }
 
 variable "ecs_cluster_name" {
