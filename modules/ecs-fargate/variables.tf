@@ -2,7 +2,7 @@ variable "ecs_cluster_name" {
   description = "Name of the ECS Cluster"
 }
 variable "vpc_id" {
-  description = "VPC ID" 
+  description = "VPC ID"
 }
 variable "ecs_task_execution_role_arn" {
   description = "ecs_task_execution_role_arn"

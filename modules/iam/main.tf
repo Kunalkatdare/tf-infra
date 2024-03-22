@@ -27,13 +27,27 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
           "ecr:GetAuthorizationToken",
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
+          "ecr:BatchGetImage"
+          
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
           "logs:CreateLogStream",
-          "logs:PutLogEvents",
+          "logs:PutLogEvents"
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
           "secretsmanager:GetSecretValue"
         ],
         "Resource" : "*"
       }
+
     ]
   })
 }
@@ -83,10 +97,10 @@ resource "aws_iam_role_policy" "ecs_task_role_policy" {
   })
 }
 
-output ecs_task_execution_role_arn {
-    value = aws_iam_role.ecs_task_execution_role.arn
+output "ecs_task_execution_role_arn" {
+  value = aws_iam_role.ecs_task_execution_role.arn
 }
 
-output ecs_task_role_arn {
-    value = aws_iam_role.ecs_task_role.arn
+output "ecs_task_role_arn" {
+  value = aws_iam_role.ecs_task_role.arn
 }
