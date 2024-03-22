@@ -20,8 +20,8 @@ resource "aws_security_group" "rds_security_group" {
   vpc_id      = var.vpc_id
   // Ingress rule allowing traffic from anywhere on port 5432 (Postgres)
   ingress {
-    from_port       = 5432
-    to_port         = 5432
+    from_port       = var.rds_ingress_port
+    to_port         = var.rds_ingress_port
     protocol        = "tcp"
     security_groups = [var.ecs_sg_id]
   }
@@ -46,20 +46,20 @@ data "aws_secretsmanager_secret_version" "current" {
 }
 
 resource "aws_db_instance" "rds" {
-  identifier             = "postgres-instance"
-  allocated_storage      = 20
-  storage_type           = "gp2"
-  engine                 = "postgres"
-  engine_version         = "16.1"
-  db_name                = "mydb"
-  instance_class         = "db.t3.micro"
+  identifier             = var.db_identifier
+  allocated_storage      = var.rds_storage
+  storage_type           = var.storage_type
+  engine                 = var.engine
+  engine_version         = var.engine_version
+  db_name                = var.db_name
+  instance_class         = var.rds_instance_class
   username               = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["DB_USER"]
   password               = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["DB_PASS"]
   publicly_accessible    = false
-  skip_final_snapshot    = true
-  port                   = 5432
-  multi_az = true
-  storage_encrypted = true
+  skip_final_snapshot    = false
+  port                   = var.rds_ingress_port
+  multi_az               = true
+  storage_encrypted      = true
   db_subnet_group_name   = aws_db_subnet_group.rds_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_security_group.id]
 

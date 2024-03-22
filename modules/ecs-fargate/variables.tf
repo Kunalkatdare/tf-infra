@@ -16,9 +16,6 @@ variable "alb_sg_id" {
 variable "ecs_sg_id" {
   description = "ecs sg id"
 }
-variable "rds_sg_id" {
-  description = "rds sg id"
-}
 variable "ecs_task_def_cpu" {
   description = "CPU for ECS task definition"
 }
@@ -51,7 +48,6 @@ variable "container_mem" {
 }
 variable "container_secrets" {
   description = "Name of the secret stored in AWS Secrets Manager"
-  default = "prod/node-express/db"
 }
 variable "branch_name" {
   description = "Name of the Git branch"

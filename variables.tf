@@ -21,7 +21,6 @@ variable "cloudwatch_log_group_name" {
 variable "capacity_providers" {
   description = "Capacity Providers for the ECS Cluster"
 }
-
 variable "ecs_task_def_cpu" {
   description = "CPU for ECS task definition"
 }
@@ -43,7 +42,6 @@ variable "container_cpu" {
 variable "tier" {
   description = "Environment"
 }
-
 variable "container_mem" {
   description = "Memory for the container"
 }
@@ -61,4 +59,31 @@ variable "project_name" {
 
 variable "branch_name" {
   description = "Name of the Git branch"
+}
+
+variable "rds_ingress_port" {
+  description = "RDS Ingress port"
+}
+
+variable "rds_storage" {
+  description = "RDS Storage"
+}
+variable "db_name" {
+  description = "RDS DB Name"
+}
+
+variable "rds_instance_class" {
+  description = "RDS Instance Class"
+}
+variable "db_identifier" {
+  description = "RDS DB Name"
+}
+variable "storage_type" {
+  description = "RDS Instance Class"
+}
+variable "engine" {
+  description = "RDS DB Name"
+}
+variable "engine_version" {
+  description = "RDS Instance Class"
 }

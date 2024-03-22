@@ -1,10 +1,10 @@
 vpc_cidr                  = "10.0.0.0/16"
 vpc_name                  = "tf-vpc"
 aws_region                = "us-east-1"
-ecs_cluster_name          = "dev-cluster"
-cloudwatch_log_group_name = "ecs-dev-cluster-logs"
+ecs_cluster_name          = "stage-cluster"
+cloudwatch_log_group_name = "ecs-stage-cluster-logs"
 capacity_providers        = "FARGATE"
-tier                      = "dev"
+tier                      = "stage"
 ecs_task_def_cpu          = 1024
 ecs_task_def_mem          = 2048
 alb_target_group          = 3000

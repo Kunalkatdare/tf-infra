@@ -33,10 +33,18 @@ module "cw-log-group" {
 
 
 module "rds" {
-  source         = "./modules/rds"
-  vpc_id         = module.vpc.vpc_id
-  db_secret_path = var.container_secrets
-  ecs_sg_id      = module.security-groups.ecs_sg_id
+  source             = "./modules/rds"
+  vpc_id             = module.vpc.vpc_id
+  db_secret_path     = var.container_secrets
+  ecs_sg_id          = module.security-groups.ecs_sg_id
+  rds_ingress_port   = var.rds_ingress_port
+  rds_storage        = var.rds_storage
+  db_identifier      = var.db_identifier
+  storage_type       = var.storage_type
+  engine             = var.engine
+  engine_version     = var.engine_version
+  db_name            = var.db_name
+  rds_instance_class = var.rds_instance_class
 }
 
 
@@ -64,7 +72,6 @@ module "ecs-fargate" {
   ecs_task_execution_role_arn = module.iam.ecs_task_execution_role_arn
   ecs_task_role_arn           = module.iam.ecs_task_role_arn
   alb_sg_id                   = module.security-groups.alb_sg_id
-  rds_sg_id                   = module.security-groups.rds_sg_id
   ecs_task_def_cpu            = var.ecs_task_def_cpu
   ecs_task_def_mem            = var.ecs_task_def_mem
   alb_target_group            = var.alb_target_group
@@ -72,7 +79,7 @@ module "ecs-fargate" {
   desired_count_tasks         = var.desired_count_tasks
   container_cpu               = var.container_cpu
   container_mem               = var.container_mem
-  cloudwatch_log_group_name = var.cloudwatch_log_group_name
+  cloudwatch_log_group_name   = var.cloudwatch_log_group_name
   ecr_image_tag               = var.ecr_image_tag
   tier                        = var.tier
   container_secrets           = var.container_secrets
@@ -80,3 +87,5 @@ module "ecs-fargate" {
   branch_name                 = var.branch_name
   ecs_sg_id                   = module.security-groups.ecs_sg_id
 }
+
+

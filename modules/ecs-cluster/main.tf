@@ -8,10 +8,10 @@ resource "aws_ecs_cluster" "cluster" {
 
   configuration {
     execute_command_configuration {
-      logging    = "OVERRIDE"
+      logging = "OVERRIDE"
       log_configuration {
         cloud_watch_log_group_name = var.cloudwatch_log_group_name
-        
+
       }
     }
   }
