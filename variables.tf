@@ -22,15 +22,6 @@ variable "capacity_providers" {
   description = "Capacity Providers for the ECS Cluster"
 }
 
-variable "image_tag_mutability" {
-  description = "Mutability of the Image Tag"
-}
-variable "scan_on_push" {
-  description = "Enable scan on push"
-}
-variable "ecr_encryption" {
-  description = "ECR encryption type"
-}
 variable "ecs_task_def_cpu" {
   description = "CPU for ECS task definition"
 }
@@ -43,14 +34,14 @@ variable "alb_target_group" {
 variable "alb_listener_port" {
   description = "ALB listener port"
 }
-variable "alb_name" {
-  description = "Name of the ALB"
-}
 variable "desired_count_tasks" {
   description = "Desired count of Fargate tasks"
 }
 variable "container_cpu" {
   description = "CPU units for the container"
+}
+variable "tier" {
+  description = "Environment"
 }
 
 variable "container_mem" {

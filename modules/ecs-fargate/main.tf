@@ -6,7 +6,7 @@ data "aws_subnets" "public" {
 }
 
 resource "aws_ecs_service" "ecs_node_app" {
-  name            = "${var.project_name}-${var.branch_name}-service"
+  name            = "${var.project_name}-${var.branch_name}-${var.tier}-service"
   cluster         = var.ecs_cluster_name
   task_definition = aws_ecs_task_definition.ecs_task_def.arn
   desired_count   = var.desired_count_tasks
@@ -20,24 +20,22 @@ resource "aws_ecs_service" "ecs_node_app" {
 
   load_balancer {
     target_group_arn = aws_alb_target_group.alb_target_group.arn
-    container_name   = "${var.project_name}-${var.branch_name}-container"
+    container_name   = "${var.project_name}-${var.branch_name}-${var.tier}-container"
     container_port   = var.alb_target_group
   }
 }
-
-
 
 data "aws_secretsmanager_secret" "by-name" {
   name = var.container_secrets
 }
 
 resource "aws_ecs_task_definition" "ecs_task_def" {
-  family                   = "${var.project_name}-${var.branch_name}-service"
+  family                   = "${var.project_name}-${var.branch_name}-${var.tier}-service"
   requires_compatibilities = ["FARGATE"]
   network_mode             = "awsvpc"
   container_definitions = jsonencode([
     {
-      name      = "${var.project_name}-${var.branch_name}-container",
+      name      = "${var.project_name}-${var.branch_name}-${var.tier}-container",
       image     = var.ecr_image_tag,
       cpu       = var.container_cpu,
       memory    = var.container_mem,
@@ -74,7 +72,7 @@ resource "aws_ecs_task_definition" "ecs_task_def" {
       logConfiguration = {
         logDriver = "awslogs",
         options = {
-          "awslogs-group"         = "ecs-dev-cluster-logs",
+          "awslogs-group"         = "${var.cloudwatch_log_group_name}",
           "awslogs-region"        = "us-east-1",
           "awslogs-stream-prefix" = "ecs"
         }
@@ -88,7 +86,7 @@ resource "aws_ecs_task_definition" "ecs_task_def" {
 }
 
 resource "aws_alb" "alb" {
-  name                       = var.alb_name
+  name                       = "${var.project_name}-${var.branch_name}-${var.tier}"
   load_balancer_type         = "application"
   internal                   = false
   security_groups            = [var.alb_sg_id]
@@ -147,7 +145,7 @@ resource "aws_lb_listener_rule" "alb_listener_https_rule" {
 }
 
 resource "aws_alb_target_group" "alb_target_group" {
-  name        = "alb-target-group"
+  name        = "${var.project_name}-${var.branch_name}-${var.tier}-tg"
   port        = var.alb_target_group
   protocol    = "HTTP"
   vpc_id      = var.vpc_id

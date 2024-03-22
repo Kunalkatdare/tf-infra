@@ -31,26 +31,31 @@ variable "alb_target_group" {
 variable "alb_listener_port" {
   description = "ALB listener port"
 }
-variable "alb_name" {
-  description = "Name of the ALB"
-}
 variable "desired_count_tasks" {
   description = "Desired count of Fargate tasks"
+}
+variable "tier" {
+  description = "Environment"
+}
+variable "cloudwatch_log_group_name" {
+  description = "Cloudwatch log group name"
 }
 variable "ecr_image_tag" {
   description = "ECR image path"
 }
 variable "container_cpu" {
-
+  description = "CPU units for the container"
 }
 variable "container_mem" {
-  
+  description = "Memory for the container"
 }
 variable "container_secrets" {
   description = "Name of the secret stored in AWS Secrets Manager"
   default = "prod/node-express/db"
 }
 variable "branch_name" {
+  description = "Name of the Git branch"
 }
 variable "project_name" {
+  description = "Name of the project or application"
 }
