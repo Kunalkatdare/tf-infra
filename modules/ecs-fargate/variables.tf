@@ -13,6 +13,9 @@ variable "ecs_task_role_arn" {
 variable "alb_sg_id" {
   description = "alb sg id"
 }
+variable "ecs_sg_id" {
+  description = "ecs sg id"
+}
 variable "rds_sg_id" {
   description = "rds sg id"
 }

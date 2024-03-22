@@ -17,11 +17,11 @@ resource "aws_db_subnet_group" "rds_subnet_group" {
 resource "aws_security_group" "rds_security_group" {
   name        = "rds-security-group"
   description = "Security group for RDS instance allowing inbound and outbound traffic"
-
-  // Ingress rule allowing traffic from anywhere on port 3306 (MySQL)
+  vpc_id = var.vpc_id
+  // Ingress rule allowing traffic from anywhere on port 5432 (Postgres)
   ingress {
-    from_port   = 3306
-    to_port     = 3306
+    from_port   = 5432
+    to_port     = 5432
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -38,18 +38,26 @@ resource "aws_security_group" "rds_security_group" {
     }
 }
 
+data "aws_secretsmanager_secret" "db_secret" {
+  name = var.db_secret_path
+}
+data "aws_secretsmanager_secret_version" "current" {
+  secret_id = data.aws_secretsmanager_secret.db_secret.id
+}
+
 resource "aws_db_instance" "rds" {
-  identifier            = "rds-instance"
-  allocated_storage     = 5  # Adjust as needed
+  identifier            = "postgres-instance"
+  allocated_storage     = 20
   storage_type          = "gp2"
-  engine                = "mysql"
-  engine_version        = "5.7"
+  engine                = "postgres"
+  engine_version        = "16.1"
+  db_name = "mydb"
   instance_class        = "db.t3.micro"
-  username              = "admin" # needs to be changed
-  password              = "adminkunal" # needs to be changed
-  publicly_accessible   = true  # Set to true if you want the database to be publicly accessible
+  username              = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["DB_USER"]
+  password              = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["DB_PASS"]
+  publicly_accessible   = false
   skip_final_snapshot   = true
-  port = 3306
+  port = 5432
   db_subnet_group_name = aws_db_subnet_group.rds_subnet_group.name
   vpc_security_group_ids = [aws_security_group.rds_security_group.id]
   

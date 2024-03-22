@@ -37,6 +37,12 @@ module "cw-log-group" {
 #   ecr_encryption       = var.ecr_encryption
 # }
 
+module "rds" {
+  source = "../../modules/rds"
+  vpc_id = module.vpc.vpc_id
+  db_secret_path = var.container_secrets
+}
+
 
 module "security-groups" {
   source = "../../modules/security-groups"
@@ -75,4 +81,5 @@ module "ecs-fargate" {
   container_secrets = var.container_secrets
   project_name = var.project_name
   branch_name = var.branch_name
+  ecs_sg_id = module.security-groups.ecs_sg_id
 }

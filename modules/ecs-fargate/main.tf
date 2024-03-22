@@ -14,7 +14,7 @@ resource "aws_ecs_service" "ecs_node_app" {
 
   network_configuration {
     subnets          = data.aws_subnets.public.ids
-    security_groups  = [var.alb_sg_id]
+    security_groups  = [var.ecs_sg_id]
     assign_public_ip = true
   }
 
