@@ -23,7 +23,7 @@ resource "aws_security_group" "rds_security_group" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    security_groups = [var.ecs_sg_id]
   }
 
   // Egress rule allowing all outbound traffic

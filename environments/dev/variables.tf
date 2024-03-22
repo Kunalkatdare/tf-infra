@@ -50,20 +50,24 @@ variable "desired_count_tasks" {
   description = "Desired count of Fargate tasks"
 }
 variable "container_cpu" {
-
+  description = "CPU units for the container"
 }
+
 variable "container_mem" {
-  
+  description = "Memory for the container"
 }
 variable "ecr_image_tag" {
-  
+  description = "Tag for the Docker image in Amazon ECR"
 }
+
 variable "container_secrets" {
-  
+  description = "Secrets to be passed to the container"
 }
+
 variable "project_name" {
-  
+  description = "Name of the project"
 }
+
 variable "branch_name" {
-  
+  description = "Name of the Git branch"
 }
