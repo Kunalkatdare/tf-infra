@@ -18,9 +18,6 @@ variable "ecs_task_def_mem" {
 variable "alb_target_group" {
   description = "ALB Target Group"
 }
-variable "alb_listener_port" {
-  description = "ALB listener port"
-}
 variable "desired_count_tasks" {
   description = "Desired count of Fargate tasks"
 }

@@ -4,6 +4,9 @@ variable "db_secret_path" {
 variable "rds_ingress_port" {
   description = "RDS Ingress port"
 }
+variable "rds_egress_port" {
+  description = "RDS Egress port"
+}
 variable "tier" {
   description = "Tier"
 }

@@ -10,6 +10,10 @@ variable "rds_ingress_port" {
   description = "RDS Ingress port"
 }
 
+variable "rds_egress_port" {
+  description = "RDS Egress port"
+}
+
 variable "rds_storage" {
   description = "RDS Storage"
 }

@@ -31,5 +31,6 @@ module "rds_database" {
   rds_instance_class = var.rds_instance_class
   storage_type       = var.storage_type
   tier               = var.tier
+  rds_egress_port    = var.rds_egress_port
 }
 
