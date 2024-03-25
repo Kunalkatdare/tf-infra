@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  required_version = "~> 1.7.0"
+}
+
+module "init" {
+  source = "../init"
+}
+
 resource "aws_iam_role" "ecs_task_execution_role" {
   name = "ECSTaskExecutionRole-${var.tier}"
   assume_role_policy = jsonencode({
@@ -37,14 +51,14 @@ resource "aws_iam_role_policy" "ecs_task_execution_role_policy" {
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        "Resource" : "*"
+        "Resource" : "arn:aws:logs:${module.init.aws_region}:${module.init.aws_account_id}:log-group:ecs-*"
       },
       {
         "Effect" : "Allow",
         "Action" : [
           "secretsmanager:GetSecretValue"
         ],
-        "Resource" : "*"
+        "Resource" : "arn:aws:secretsmanager:${module.init.aws_region}:${module.init.aws_account_id}:secret:${var.secret_path}*"
       }
 
     ]
@@ -84,11 +98,25 @@ resource "aws_iam_role_policy" "ecs_task_role_policy" {
           "ecr:GetAuthorizationToken",
           "ecr:BatchCheckLayerAvailability",
           "ecr:GetDownloadUrlForLayer",
-          "ecr:BatchGetImage",
+          "ecr:BatchGetImage"
+
+        ],
+        "Resource" : "*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
           "logs:CreateLogStream",
           "logs:PutLogEvents"
         ],
-        "Resource" : "*"
+        "Resource" : "arn:aws:logs:${module.init.aws_region}:${module.init.aws_account_id}:log-group:ecs-*"
+      },
+      {
+        "Effect" : "Allow",
+        "Action" : [
+          "secretsmanager:GetSecretValue"
+        ],
+        "Resource" : "arn:aws:secretsmanager:${module.init.aws_region}:${module.init.aws_account_id}:secret:${var.secret_path}/*"
       }
     ]
   })

@@ -1,19 +1,27 @@
 terraform {
   backend "s3" {
-    bucket = "terraform-state-kk-devops"
-    key = "global/s3/terraform.tfstate"
-    region = "us-east-1"
+    bucket         = "terraform-state-kk-devops"
+    key            = "global/s3/terraform.tfstate"
+    region         = "us-east-1"
     dynamodb_table = "terraform-state-locking"
-    encrypt = true
-    
+    encrypt        = true
+
   }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  required_version = "~> 1.7.0"
 }
+
 provider "aws" {
   region = "us-east-1"
 }
 
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "terraform-state-kk-devops"
+  bucket        = "terraform-state-kk-devops"
   force_destroy = false
   lifecycle {
     prevent_destroy = true
@@ -21,8 +29,8 @@ resource "aws_s3_bucket" "terraform_state" {
 
 }
 resource "aws_s3_bucket_versioning" "tf_s3_versioning" {
-    bucket = aws_s3_bucket.terraform_state.id
-    versioning_configuration {
+  bucket = aws_s3_bucket.terraform_state.id
+  versioning_configuration {
     status = "Enabled"
   }
   lifecycle {
@@ -35,7 +43,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_encryption" {
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm     = "aws:kms"
+      sse_algorithm = "aws:kms"
     }
   }
   lifecycle {
@@ -45,15 +53,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "s3_encryption" {
 
 resource "aws_dynamodb_table" "lock_table" {
 
-    name = "terraform-state-locking"
-    billing_mode = "PAY_PER_REQUEST"
-    hash_key = "LockID"
-    attribute {
-      name = "LockID"
-      type = "S"
-    }
-    lifecycle {
+  name         = "terraform-state-locking"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+  lifecycle {
     prevent_destroy = true
   }
-  
+
 }

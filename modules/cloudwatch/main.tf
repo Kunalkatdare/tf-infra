@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  required_version = "~> 1.7.0"
+}
+
 resource "aws_cloudwatch_log_group" "ecs_cluster_log_group" {
   name              = var.cloudwatch_log_group_name
   retention_in_days = 180

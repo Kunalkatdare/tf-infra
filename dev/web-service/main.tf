@@ -7,6 +7,13 @@ terraform {
     encrypt        = true
 
   }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  required_version = "~> 1.7.0"
 }
 provider "aws" {
   region = "us-east-1"
@@ -15,13 +22,6 @@ provider "aws" {
 data "aws_vpc" "my_vpc" {
   tags = {
     Name = "tf-vpc"
-  }
-}
-
-data "aws_subnets" "public" {
-  filter {
-    name   = "tag:Name"
-    values = ["*public*"]
   }
 }
 

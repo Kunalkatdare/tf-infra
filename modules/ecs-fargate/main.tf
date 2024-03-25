@@ -1,3 +1,17 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  required_version = "~> 1.7.0"
+}
+
+module "init" {
+  source = "../init"
+}
+
 data "aws_subnets" "public" {
   filter {
     name   = "tag:Name"
@@ -58,7 +72,7 @@ resource "aws_ecs_task_definition" "ecs_task_def" {
   container_definitions = jsonencode([
     {
       name      = "${var.project_name}-${var.branch_name}-${var.tier}-container",
-      image     = var.ecr_image_tag,
+      image     = "${module.init.aws_account_id}.dkr.ecr.${module.init.aws_region}.amazonaws.com/${var.project_name}-${var.branch_name}",
       cpu       = var.container_cpu,
       memory    = var.container_mem,
       essential = true,
@@ -94,7 +108,7 @@ resource "aws_ecs_task_definition" "ecs_task_def" {
       logConfiguration = {
         logDriver = "awslogs",
         options = {
-          "awslogs-group"         = "${var.cloudwatch_log_group_name}",
+          "awslogs-group"         = var.cloudwatch_log_group_name,
           "awslogs-region"        = "us-east-1",
           "awslogs-stream-prefix" = "ecs"
         }

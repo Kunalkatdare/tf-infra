@@ -7,6 +7,13 @@ terraform {
     encrypt        = true
 
   }
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  required_version = "~> 1.7.0"
 }
 provider "aws" {
   region = "us-east-1"
@@ -14,6 +21,9 @@ provider "aws" {
 
 
 module "iam" {
-  source = "../../modules/iam"
-  tier   = "dev"
+  source       = "../../modules/iam"
+  tier         = var.tier
+  project_name = var.project_name
+  secret_path  = var.secret_path
+
 }

@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0.0"
+    }
+  }
+  required_version = "~> 1.7.0"
+}
+
 
 data "aws_subnets" "private_subnets" {
   filter {
@@ -32,7 +42,7 @@ resource "aws_security_group" "rds_security_group" {
   egress {
     from_port       = var.rds_egress_port
     to_port         = var.rds_egress_port
-    protocol    = "tcp"
+    protocol        = "tcp"
     security_groups = [data.aws_security_group.ecs_sg.id]
   }
 }
@@ -45,22 +55,24 @@ data "aws_secretsmanager_secret_version" "current" {
 }
 
 resource "aws_db_instance" "rds" {
-  identifier             = var.db_identifier
-  allocated_storage      = var.rds_storage
-  storage_type           = var.storage_type
-  engine                 = var.engine
-  engine_version         = var.engine_version
-  db_name                = var.db_name
-  instance_class         = var.rds_instance_class
-  username               = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["DB_USER"]
-  password               = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["DB_PASS"]
-  publicly_accessible    = false
-  skip_final_snapshot    = false
-  port                   = var.rds_ingress_port
-  multi_az               = true
-  storage_encrypted      = true
-  db_subnet_group_name   = aws_db_subnet_group.rds_subnet_group.name
-  vpc_security_group_ids = [aws_security_group.rds_security_group.id]
+  identifier                   = var.db_identifier
+  allocated_storage            = var.rds_storage
+  storage_type                 = var.storage_type
+  engine                       = var.engine
+  backup_retention_period      = 35
+  engine_version               = var.engine_version
+  db_name                      = var.db_name
+  instance_class               = var.rds_instance_class
+  username                     = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["DB_USER"]
+  password                     = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["DB_PASS"]
+  publicly_accessible          = false
+  port                         = var.rds_ingress_port
+  multi_az                     = true
+  storage_encrypted            = true
+  deletion_protection          = true
+  performance_insights_enabled = true
+  db_subnet_group_name         = aws_db_subnet_group.rds_subnet_group.name
+  vpc_security_group_ids       = [aws_security_group.rds_security_group.id]
 }
 
 output "rds_endpoint" {

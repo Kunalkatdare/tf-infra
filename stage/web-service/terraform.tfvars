@@ -5,6 +5,7 @@ tier                      = "stage"
 ecs_task_def_cpu          = 1024
 ecs_task_def_mem          = 2048
 alb_target_group          = 3000
+alb_listener_port         = 80
 desired_count_tasks       = 2
 container_cpu             = 1024
 container_mem             = 2048

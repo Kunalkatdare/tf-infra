@@ -1,12 +1,12 @@
 variable "tier" {
+  type = string
   description = "Tier"
-  type        = string
 }
 variable "project_name" {
-  type        = string
+  type = string
   description = "Project Name"
 }
 variable "secret_path" {
-  type        = string
+  type = string
   description = "Path to container secrets in secrets manager"
 }

@@ -57,4 +57,3 @@ variable "host_port" {
 variable "app_health_check_path" {
   description = "application health check path"
 }
-
